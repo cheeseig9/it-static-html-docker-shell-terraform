@@ -20,13 +20,13 @@ sudo docker build -t techmax .
 cat ~/my_password.txt | sudo docker login --username chetseig9 --password-stdin
 
 # use the docker tag command to give the image a new name
-sudo docker tag techmax chetseig9/techmax-terraform
+sudo docker tag techmax chetseig9/techseng-terraform
 
 # push the image to your docker hub repository
-sudo docker push chetseig9/techmax-terraform
+sudo docker push chetseig9/techseng-terraform
 
 # start the container to test the image 
-sudo docker run -dp 80:80 chetseig9/techmax-terraform
+sudo docker run -dp 80:80 chetseig9/techseng-terraform
 
 # referances
 # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/create-container-image.html

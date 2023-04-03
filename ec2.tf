@@ -1,9 +1,21 @@
 # configured aws provider with proper credentials
-provider "aws" {
-  region  = "us-east-1"
-  profile = "terraform-user"
+# provider "aws" {
+#   region  = "us-east-1"
+#   profile = ""
+# }
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.0"
+    }
+  }
 }
 
+# Configure the AWS Provider
+provider "aws" {
+  region = "us-east-1"
+}
 
 # create default vpc if one does not exit
 resource "aws_default_vpc" "default_vpc" {
@@ -84,7 +96,7 @@ data "aws_ami" "amazon_linux_2" {
 resource "aws_instance" "ec2_instance" {
   ami                    = data.aws_ami.amazon_linux_2.id
   instance_type          = "t2.micro"
-  subnet_id              = aws_default_subnet.default_az1
+  subnet_id              = aws_default_subnet.default_az1.id
   vpc_security_group_ids = [aws_security_group.ec2_security_group.id]
   key_name               = "AccessSSH"
 
@@ -101,14 +113,14 @@ resource "null_resource" "name" {
   connection {
     type        = "ssh"
     user        = "ec2-user"
-    private_key = file("~/Desktop/AccessSSH.pem")
+    private_key = file("~/Downloads/AccessSSH.pem")
     host        = aws_instance.ec2_instance.public_ip
   }
 
   # copy the password file for your docker hub account
   # from your computer to the ec2 instance 
   provisioner "file" {
-    source      = "~/Desktop/my_password.txt"
+    source      = "~/Downloads/my_password.txt"
     destination = "/home/ec2-user/my_password.txt"
   }
 
@@ -127,7 +139,7 @@ resource "null_resource" "name" {
   # set permissions and run the build_docker_image.sh file
   provisioner "remote-exec" {
     inline = [
-      "sudo chmod +x /home/ec2-user/build_docker_image.sh"
+      "sudo chmod +x /home/ec2-user/build_docker_image.sh",
       "sh /home/ec2-user/build_docker_image.sh"
     ]
   }
