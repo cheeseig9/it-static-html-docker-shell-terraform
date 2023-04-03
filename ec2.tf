@@ -1,8 +1,6 @@
+# SOURCE: https://www.youtube.com/playlist?list=PL184oVW5ERMBHODT_7ZDZmeclRWQU_wjW
+
 # configured aws provider with proper credentials
-# provider "aws" {
-#   region  = "us-east-1"
-#   profile = ""
-# }
 terraform {
   required_providers {
     aws = {
@@ -154,3 +152,8 @@ resource "null_resource" "name" {
 output "container_url" {
   value = join("", ["http://", aws_instance.ec2_instance.public_dns])
 }
+
+# terraform init
+# terraform plan
+# terraform apply
+# terraform destroy (to delete)
